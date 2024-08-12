@@ -4,8 +4,8 @@ volumes:
   cargo_cache:
   pg_data:
   router_build_cache:
-  scheduler_build_cache:
-  drainer_build_cache:
+  #scheduler_build_cache:
+  #drainer_build_cache:
   redisinsight_store:
 
 networks:
@@ -59,20 +59,16 @@ services:
 
   ### Application services
   hyperswitch-server:
-    image: rust:latest
-    command: cargo run --bin router -- -f ./config/docker_compose.toml
-    working_dir: /app
+    image: juspaydotin/hyperswitch-router:standalone
+    pull_policy: always
+    command: /local/bin/router -f /local/config/docker_compose.toml
     ports:
-      - "8080:8080"
+      - "8081:8080"
     networks:
       - router_net
     volumes:
-      - ./:/app
-      - cargo_cache:/cargo_cache
-      - router_build_cache:/cargo_build_cache
-    environment:
-      - CARGO_HOME=/cargo_cache
-      - CARGO_TARGET_DIR=/cargo_build_cache
+      - ./config:/local/config
+      - ./files:/local/bin/files
     depends_on:
       pg:
         condition: service_healthy
@@ -82,13 +78,15 @@ services:
       logs: "promtail"
     healthcheck:
       test: curl --fail http://localhost:8080/health || exit 1
-      interval: 120s
-      retries: 4
-      start_period: 20s
-      timeout: 10s
+      interval: 5s
+      retries: 3
+      start_period: 5s
+      timeout: 5s
+    environment:
+      Env: dev
 
   hyperswitch-producer:
-    image: rust:latest
+    image: rust:bullseye
     command: cargo run --bin scheduler -- -f ./config/docker_compose.toml
     working_dir: /app
     networks:
@@ -110,7 +108,7 @@ services:
       logs: "promtail"
 
   hyperswitch-consumer:
-    image: rust:latest
+    image: rust:bullseye
     command: cargo run --bin scheduler -- -f ./config/docker_compose.toml
     working_dir: /app
     networks:
@@ -138,7 +136,7 @@ services:
       timeout: 10s
 
   hyperswitch-drainer:
-    image: rust:latest
+    image: rust:bullseye
     command: cargo run --bin drainer -- -f ./config/docker_compose.toml
     working_dir: /app
     deploy:
@@ -165,7 +163,7 @@ services:
   redis-cluster:
     image: redis:7
     deploy:
-      replicas: ${REDIS_CLUSTER_COUNT:-3}
+      replicas: ${REDIS_CLUSTER_COUNT:-1}
     command: redis-server /usr/local/etc/redis/redis.conf
     profiles:
       - clustered_redis
@@ -185,13 +183,13 @@ services:
       - redis-cluster
     networks:
       - router_net
-    command: "bash -c 'export COUNT=${REDIS_CLUSTER_COUNT:-3}
+    command: "bash -c 'export COUNT=${REDIS_CLUSTER_COUNT:-1}
 
-      \ if [ $$COUNT -lt 3 ]
+      \ if [ $$COUNT -lt 1 ]
 
       \ then
 
-      \ echo \"Minimum 3 nodes are needed for redis cluster\"
+      \ echo \"Minimum 1 nodes are needed for redis cluster\"
 
       \ exit 1
 
@@ -311,28 +309,34 @@ services:
       - redisinsight_store:/db
 
   hyperswitch-control-center:
-    image: juspaydotin/hyperswitch-control-center:latest
+    image: almbolonzi/hyperswitch-cc:latest
     pull_policy: always
-    networks:
-      - router_net
     ports:
       - "9000:9000"
     environment:
-      apiBaseUrl: http://localhost:8080
-      sdkBaseUrl: http://localhost:9050/HyperLoader.js
+      - configPath=/tmp/dashboard-config.toml
+    volumes:
+      - ./config/dashboard.toml:/tmp/dashboard-config.toml
+    depends_on:
+      hyperswitch-server:
+        condition: service_healthy
+      hyperswitch-web-sdk:
+        condition: service_started
+    labels:
+      logs: "promtail"
 
   hyperswitch-web-sdk:
     build:
       dockerfile_inline: |
         FROM node:lts
-        RUN git clone https://github.com/juspay/hyperswitch-web.git --depth 1
+        RUN git clone -b kemetx https://github.com/Alkebulan-Tech/hyperswitch-web.git --depth 1
         WORKDIR hyperswitch-web
         RUN npm i --force
-    command: bash -c 'npm run re:build && npx run webpack serve --config webpack.dev.js --host 0.0.0.0'
+    command: bash -c 'npm run re:build && npm start'
     ports:
       - "9050:9050"
     environment:
       sdkEnv: local
       envSdkUrl: http://localhost:9050
-      envBackendUrl: http://localhost:8080
+      envBackendUrl: http://localhost:8081
       envLoggingUrl: http://localhost:8207

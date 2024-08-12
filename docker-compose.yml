@@ -58,7 +58,7 @@ services:
     pull_policy: always
     command: /local/bin/router -f /local/config/docker_compose.toml
     ports:
-      - "8080:8080"
+      - "8081:8080"
     networks:
       - router_net
     volumes:
@@ -72,7 +72,7 @@ services:
     labels:
       logs: "promtail"
     healthcheck:
-      test: curl --fail http://localhost:8080/health || exit 1
+      test: curl --fail http://localhost:8081/health || exit 1
       interval: 5s
       retries: 3
       start_period: 5s
@@ -156,8 +156,8 @@ services:
     environment:
       - HYPERSWITCH_PUBLISHABLE_KEY=placeholder_publishable_key
       - HYPERSWITCH_SECRET_KEY=placeholder_api_key
-      - HYPERSWITCH_SERVER_URL=http://localhost:8080
-      - HYPERSWITCH_SERVER_URL_FOR_DEMO_APP=http://hyperswitch-server:8080
+      - HYPERSWITCH_SERVER_URL=http://localhost:8081
+      - HYPERSWITCH_SERVER_URL_FOR_DEMO_APP=http://hyperswitch-server:8081
       - HYPERSWITCH_CLIENT_URL=http://localhost:9050
       - SELF_SERVER_URL=http://localhost:5252
       - SDK_ENV=local
@@ -167,7 +167,7 @@ services:
 
   ### Control Center
   hyperswitch-control-center:
-    image: juspaydotin/hyperswitch-control-center:latest
+    image: almbolonzi/hyperswitch-cc:latest
     pull_policy: always
     ports:
       - "9000:9000"
@@ -208,10 +208,10 @@ services:
     networks:
       - router_net
     command: |-
-      bash -c 'export COUNT=${REDIS_CLUSTER_COUNT:-3}
-      if [ $$COUNT -lt 3 ]
+      bash -c 'export COUNT=${REDIS_CLUSTER_COUNT:-1}
+      if [ $$COUNT -lt 1 ]
       then
-      echo \"Minimum 3 nodes are needed for redis cluster\"
+      echo \"Minimum 1 nodes are needed for redis cluster\"
       exit 1
       fi
       HOSTS=\"\"

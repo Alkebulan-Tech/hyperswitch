@@ -27,7 +27,7 @@ password = "db_pass"
 host = "pg"
 port = 5432
 dbname = "hyperswitch_db"
-pool_size = 5
+pool_size = 2
 
 [forex_api]
 call_delay = 21600
@@ -44,7 +44,7 @@ password = "db_pass"
 host = "pg"
 port = 5432
 dbname = "hyperswitch_db"
-pool_size = 5
+pool_size = 2
 
 [secrets]
 admin_api_key = "test_admin"
@@ -56,7 +56,7 @@ recon_admin_api_key = "recon_test_admin"
 password_validity_in_days = 90
 two_factor_auth_expiry_in_secs = 300
 totp_issuer_name = "Hyperswitch"
-base_url = "http://localhost:8080"
+base_url = "http://localhost:8081"
 
 [locker]
 host = ""
@@ -76,7 +76,7 @@ host = "redis-standalone"
 port = 6379
 cluster_enabled = false
 cluster_urls = ["redis-cluster:6379"]
-pool_size = 5
+pool_size = 2
 reconnect_max_attempts = 5
 reconnect_delay = 5
 default_ttl = 300
@@ -528,14 +528,14 @@ enabled = false
 global_tenant = { schema = "public", redis_key_prefix = "", clickhouse_database = "default"}
 
 [multitenancy.tenants]
-public = { name = "hyperswitch", base_url = "http://localhost:8080", schema = "public", redis_key_prefix = "", clickhouse_database = "default" }
+public = { name = "hyperswitch", base_url = "http://localhost:8081", schema = "public", redis_key_prefix = "", clickhouse_database = "default"}
 
 [user_auth_methods]
 encryption_key = "A8EF32E029BC3342E54BF2E172A4D7AA43E8EF9D2C3A624A9F04E2EF79DC698F"
 
 [generic_link]
 [generic_link.payment_method_collect]
-sdk_url = "http://localhost:9090/0.16.7/v0/HyperLoader.js"
+sdk_url = "http://localhost:9050/HyperLoader.js"
 expiry = 900
 [generic_link.payment_method_collect.ui_config]
 theme = "#4285F4"
@@ -547,7 +547,7 @@ bank_transfer = "ach,bacs,sepa"
 wallet = "paypal,pix,venmo"
 
 [generic_link.payout_link]
-sdk_url = "http://localhost:9090/0.16.7/v0/HyperLoader.js"
+sdk_url = "http://localhost:9050/HyperLoader.js"
 expiry = 900
 [generic_link.payout_link.ui_config]
 theme = "#4285F4"
@@ -557,7 +557,7 @@ merchant_name = "HyperSwitch"
 card = "credit,debit"
 
 [payout_method_filters.adyenplatform]
-sepa = { country = "ES,SK,AT,NL,DE,BE,FR,FI,PT,IE,EE,LT,LV,IT,CZ,DE,HU,NO,PL,SE,GB,CH", currency = "EUR,CZK,DKK,HUF,NOR,PLN,SEK,GBP,CHF" }
+sepa = { country = "ES,SK,AT,NL,DE,BE,FR,FI,PT,IE,EE,LT,LV,IT,CZ,DE,HU,NO,PL,SE,GB,CH", currency = "EUR,CZK,DKK,HUF,NOK,PLN,SEK,GBP,CHF" }
 
 [payout_method_filters.stripe]
 ach = { country = "US", currency = "USD" }
