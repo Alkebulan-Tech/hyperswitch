@@ -83,7 +83,7 @@ services:
       start_period: 5s
       timeout: 5s
     environment:
-      Env: dev
+      RUN_ENV: development
 
   hyperswitch-producer:
     image: rust:bullseye
@@ -308,35 +308,35 @@ services:
     volumes:
       - redisinsight_store:/db
 
-  hyperswitch-control-center:
-    image: almbolonzi/hyperswitch-cc:latest
-    pull_policy: always
-    ports:
-      - "9000:9000"
-    environment:
-      - configPath=/tmp/dashboard-config.toml
-    volumes:
-      - ./config/dashboard.toml:/tmp/dashboard-config.toml
-    depends_on:
-      hyperswitch-server:
-        condition: service_healthy
-      hyperswitch-web-sdk:
-        condition: service_started
-    labels:
-      logs: "promtail"
+  # hyperswitch-control-center:
+  #   image: almbolonzi/hyperswitch-cc:latest
+  #   pull_policy: always
+  #   ports:
+  #     - "9000:9000"
+  #   environment:
+  #     - configPath=/tmp/dashboard-config.toml
+  #   volumes:
+  #     - ./config/dashboard.toml:/tmp/dashboard-config.toml
+  #   depends_on:
+  #     hyperswitch-server:
+  #       condition: service_healthy
+  #     hyperswitch-web-sdk:
+  #       condition: service_started
+  #   labels:
+  #     logs: "promtail"
 
-  hyperswitch-web-sdk:
-    build:
-      dockerfile_inline: |
-        FROM node:lts
-        RUN git clone -b kemetx https://github.com/Alkebulan-Tech/hyperswitch-web.git --depth 1
-        WORKDIR hyperswitch-web
-        RUN npm i --force
-    command: bash -c 'npm run re:build && npm start'
-    ports:
-      - "9050:9050"
-    environment:
-      sdkEnv: local
-      envSdkUrl: http://localhost:9050
-      envBackendUrl: http://localhost:8081
-      envLoggingUrl: http://localhost:8207
+  # hyperswitch-web-sdk:
+  #   build:
+  #     dockerfile_inline: |
+  #       FROM node:lts
+  #       RUN git clone -b kemetx https://github.com/Alkebulan-Tech/hyperswitch-web.git --depth 1
+  #       WORKDIR hyperswitch-web
+  #       RUN npm i --force
+  #   command: bash -c 'npm run re:build && npm start'
+  #   ports:
+  #     - "9050:9050"
+  #   environment:
+  #     sdkEnv: local
+  #     envSdkUrl: http://localhost:9050
+  #     envBackendUrl: http://localhost:8081
+  #     envLoggingUrl: http://localhost:8207

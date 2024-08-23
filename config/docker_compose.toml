@@ -56,7 +56,7 @@ recon_admin_api_key = "recon_test_admin"
 password_validity_in_days = 90
 two_factor_auth_expiry_in_secs = 300
 totp_issuer_name = "Hyperswitch"
-base_url = "http://localhost:8081"
+base_url = "https://piglet-engaging-mako.ngrok-free.app"
 
 [locker]
 host = ""
@@ -321,8 +321,8 @@ refund_tolerance = 100
 refund_retrieve_duration = 500
 refund_retrieve_tolerance = 100
 authorize_ttl = 36000
-assets_base_url = "https://app.hyperswitch.io/assets/TestProcessor/"
-default_return_url = "https://app.hyperswitch.io/"
+assets_base_url = "https://piglet-engaging-mako.ngrok-free.app/assets/TestProcessor/"
+default_return_url = "https://piglet-engaging-mako.ngrok-free.app/"
 slack_invite_url = "https://join.slack.com/t/hyperswitch-io/shared_invite/zt-2awm23agh-p_G5xNpziv6yAiedTkkqLg"
 discord_invite_url = "https://discord.gg/wJZ7DVW8mm"
 
@@ -534,14 +534,14 @@ enabled = false
 global_tenant = { schema = "public", redis_key_prefix = "", clickhouse_database = "default"}
 
 [multitenancy.tenants]
-public = { name = "hyperswitch", base_url = "http://localhost:8081", schema = "public", redis_key_prefix = "", clickhouse_database = "default"}
+public = { name = "hyperswitch", base_url = "https://piglet-engaging-mako.ngrok-free.app", schema = "public", redis_key_prefix = "", clickhouse_database = "default"}
 
 [user_auth_methods]
 encryption_key = "A8EF32E029BC3342E54BF2E172A4D7AA43E8EF9D2C3A624A9F04E2EF79DC698F"
 
 [generic_link]
 [generic_link.payment_method_collect]
-sdk_url = "http://localhost:9050/HyperLoader.js"
+sdk_url = "https://kemetx-sdk.web.app/HyperLoader.js"
 expiry = 900
 [generic_link.payment_method_collect.ui_config]
 theme = "#4285F4"
@@ -553,7 +553,7 @@ bank_transfer = "ach,bacs,sepa"
 wallet = "paypal,pix,venmo"
 
 [generic_link.payout_link]
-sdk_url = "http://localhost:9050/HyperLoader.js"
+sdk_url = "https://kemetx-sdk.web.app/HyperLoader.js"
 expiry = 900
 [generic_link.payout_link.ui_config]
 theme = "#4285F4"

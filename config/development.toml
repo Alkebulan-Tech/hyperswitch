@@ -303,7 +303,7 @@ sts_role_session_name = ""
 password_validity_in_days = 90
 two_factor_auth_expiry_in_secs = 300
 totp_issuer_name = "Hyperswitch Dev"
-base_url = "http://localhost:8080"
+base_url = "https://piglet-engaging-mako.ngrok-free.app"
 
 [bank_config.eps]
 stripe = { banks = "arzte_und_apotheker_bank,austrian_anadi_bank_ag,bank_austria,bankhaus_carl_spangler,bankhaus_schelhammer_und_schattera_ag,bawag_psk_ag,bks_bank_ag,brull_kallmus_bank_ag,btv_vier_lander_bank,capital_bank_grawe_gruppe_ag,dolomitenbank,easybank_ag,erste_bank_und_sparkassen,hypo_alpeadriabank_international_ag,hypo_noe_lb_fur_niederosterreich_u_wien,hypo_oberosterreich_salzburg_steiermark,hypo_tirol_bank_ag,hypo_vorarlberg_bank_ag,hypo_bank_burgenland_aktiengesellschaft,marchfelder_bank,oberbank_ag,raiffeisen_bankengruppe_osterreich,schoellerbank_ag,sparda_bank_wien,volksbank_gruppe,volkskreditbank_ag,vr_bank_braunau" }
@@ -550,8 +550,8 @@ refund_tolerance = 100
 refund_retrieve_duration = 500
 refund_retrieve_tolerance = 100
 authorize_ttl = 36000
-assets_base_url = "https://app.hyperswitch.io/assets/TestProcessor/"
-default_return_url = "https://app.hyperswitch.io/"
+assets_base_url = "https://piglet-engaging-mako.ngrok-free.app/assets/TestProcessor/"
+default_return_url = "https://piglet-engaging-mako.ngrok-free.app/"
 slack_invite_url = "https://join.slack.com/t/hyperswitch-io/shared_invite/zt-2awm23agh-p_G5xNpziv6yAiedTkkqLg"
 discord_invite_url = "https://discord.gg/wJZ7DVW8mm"
 
@@ -598,7 +598,7 @@ apple_pay_merchant_cert_key = "APPLE_PAY_MERCHNAT_CERTIFICATE_KEY"
 
 [generic_link]
 [generic_link.payment_method_collect]
-sdk_url = "http://localhost:9050/HyperLoader.js"
+sdk_url = "https://kemetx-sdk.web.app/HyperLoader.js"
 expiry = 900
 [generic_link.payment_method_collect.ui_config]
 theme = "#4285F4"
@@ -610,7 +610,7 @@ bank_transfer = "ach,bacs,sepa"
 wallet = "paypal,pix,venmo"
 
 [generic_link.payout_link]
-sdk_url = "http://localhost:9050/HyperLoader.js"
+sdk_url = "https://kemetx-sdk.web.app/HyperLoader.js"
 expiry = 900
 [generic_link.payout_link.ui_config]
 theme = "#4285F4"
@@ -626,7 +626,7 @@ sepa = { country = "ES,SK,AT,NL,DE,BE,FR,FI,PT,IE,EE,LT,LV,IT,CZ,DE,HU,NO,PL,SE,
 ach = { country = "US", currency = "USD" }
 
 [payment_link]
-sdk_url = "http://localhost:9050/HyperLoader.js"
+sdk_url = "https://kemetx-sdk.web.app/HyperLoader.js"
 
 [payment_method_auth]
 redis_expiry = 900
@@ -715,7 +715,7 @@ enabled = false
 global_tenant = { schema = "public", redis_key_prefix = "", clickhouse_database = "default"}
 
 [multitenancy.tenants]
-public = { name = "hyperswitch", base_url = "http://localhost:8081", schema = "public", redis_key_prefix = "", clickhouse_database = "default"}
+public = { name = "hyperswitch", base_url = "https://piglet-engaging-mako.ngrok-free.app", schema = "public", redis_key_prefix = "", clickhouse_database = "default"}
 
 [user_auth_methods]
 encryption_key = "A8EF32E029BC3342E54BF2E172A4D7AA43E8EF9D2C3A624A9F04E2EF79DC698F"
