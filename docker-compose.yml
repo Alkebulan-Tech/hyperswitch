@@ -34,7 +34,7 @@ services:
     ports:
       - "6379:6379"
     healthcheck:
-      test: ["CMD-SHELL", "redis-cli ping | grep '^PONG$'"]
+      test: ["CMD-SHELL", "redis-cli ping | grep '^PONG$$'"]
       interval: 5s
       retries: 3
       start_period: 5s
@@ -125,7 +125,7 @@ services:
     pull_policy: always
     command: /local/bin/drainer -f /local/config/docker_compose.toml
     deploy:
-      replicas: ${DRAINER_INSTANCE_COUNT:-1}
+      replicas: 1 #$${DRAINER_INSTANCE_COUNT:1}
     networks:
       - router_net
     profiles:
@@ -187,7 +187,7 @@ services:
   redis-cluster:
     image: redis:7
     deploy:
-      replicas: ${REDIS_CLUSTER_COUNT:-3}
+      replicas: 3 #$${REDIS_CLUSTER_COUNT:-3}
     command: redis-server /usr/local/etc/redis/redis.conf
     profiles:
       - clustered_redis

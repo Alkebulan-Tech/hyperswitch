@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f ../../docker-compose.yml
+    kompose.version: 1.34.0 (HEAD)
+    logs: promtail
+  labels:
+    io.kompose.service: hyperswitch-server
+  name: hyperswitch-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: hyperswitch-server
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f ../../docker-compose.yml
+        kompose.version: 1.34.0 (HEAD)
+        logs: promtail
+      labels:
+        io.kompose.service: hyperswitch-server
+    spec:
+      containers:
+        - args:
+            - /local/bin/router
+            - -f
+            - /local/config/docker_compose.toml
+          image: juspaydotin/hyperswitch-router:standalone
+          livenessProbe:
+            exec:
+              command:
+                - curl --fail http://localhost:8081/health || exit 1
+            failureThreshold: 3
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 5
+          name: hyperswitch-server
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /local/config
+              name: hyperswitch-server-cm0
+            - mountPath: /local/bin/files
+              name: hyperswitch-server-claim1
+      restartPolicy: Always
+      volumes:
+        - configMap:
+            name: hyperswitch-server-cm0
+          name: hyperswitch-server-cm0
+        - name: hyperswitch-server-claim1
+          persistentVolumeClaim:
+            claimName: hyperswitch-server-claim1
